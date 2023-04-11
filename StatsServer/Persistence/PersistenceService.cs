@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using avaness.StatsServer.Tools;
@@ -9,30 +8,32 @@ using Microsoft.Extensions.Logging;
 
 namespace avaness.StatsServer.Persistence
 {
+    /// <summary>
+    /// Background service to periodically saving the database to disk and
+    /// making a backups in ZIP format each day
+    /// </summary>
     public class PersistenceService : PeriodicTimerService
     {
-        private readonly StatsDatabase statsDatabase;
+        private readonly IStatsDatabase statsDatabase;
 
-        public PersistenceService(ILogger<PersistenceService> logger) : base(logger)
+        public PersistenceService(ILogger<PersistenceService> logger, IStatsDatabase statsDatabase) : base(logger)
         {
             Name = GetType().Name;
             Period = Config.SavePeriod;
 
-            statsDatabase = new StatsDatabase();
+            this.statsDatabase = statsDatabase;
         }
 
-#pragma warning disable CA1816
         public override void Dispose()
         {
             statsDatabase.Dispose();
-
             base.Dispose();
         }
-#pragma warning restore CA1816
 
         protected override void DoWork(object state)
         {
-            statsDatabase?.Save();
+            statsDatabase.Save();
+            statsDatabase.Canary();
             Backup();
         }
 
@@ -53,7 +54,7 @@ namespace avaness.StatsServer.Persistence
                 var dataDir = Config.DataDir;
                 foreach (var filePath in Directory.EnumerateFiles(dataDir, "*", SearchOption.AllDirectories))
                 {
-                    var relativePath = filePath[dataDir.Length..];
+                    var relativePath = filePath.Substring(dataDir.Length);
                     zip.CreateEntryFromFile(filePath, relativePath, CompressionLevel.Optimal);
                 }
             }

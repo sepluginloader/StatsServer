@@ -17,9 +17,8 @@ namespace avaness.StatsServer.Controllers
         [HttpGet]
         public string Get()
         {
-            // Make sure the server is not deadlocked
+            statsDatabase.CountRequest(Request);
             statsDatabase.Canary();
-
             return "OK";
         }
     }

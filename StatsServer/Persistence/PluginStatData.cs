@@ -94,28 +94,14 @@ namespace avaness.StatsServer.Persistence
 
             modified = false;
 
-            var json = JsonSerializer.Serialize(this, Tools.Tools.JsonOptions);
-
-            var newPath = JsonPath + ".new";
-            File.WriteAllText(newPath, json);
-            File.Move(newPath, JsonPath, true);
+            Tools.Tools.SaveAsJsonFile(JsonPath, this);
         }
 
         public static PluginStatData Load(string pluginId)
         {
             var fileName = FormatFilename(pluginId);
             var path = FormatPath(fileName);
-
-            if (!File.Exists(path))
-                return new PluginStatData(pluginId);
-
-            var json = File.ReadAllText(path);
-            var pluginStatData = JsonSerializer.Deserialize<PluginStatData>(json);
-            Debug.Assert(pluginStatData != null);
-
-            pluginStatData.CleanupExpiredUses();
-
-            return pluginStatData;
+            return Tools.Tools.LoadFromJson<PluginStatData>(path);
         }
 
         public void ReportUse(string playerHash, string day)
