@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
@@ -63,6 +65,27 @@ namespace avaness.StatsServer.Tools
                 hex.Append(t.ToString("x2"));
 
             return hex.ToString();
+        }
+
+        public static void SaveAsJsonFile<T>(string path, T value) where T: class
+        {
+            var json = JsonSerializer.Serialize(value, JsonOptions);
+            var newPath = path + ".new";
+            File.WriteAllText(newPath, json);
+            File.Move(newPath, path, true);
+        }
+
+        public static T LoadFromJson<T>(string path) where T: class
+        {
+            if (!File.Exists(path))
+            {
+                return null;
+            }
+
+            var json = File.ReadAllText(path);
+            var value = JsonSerializer.Deserialize<T>(json);
+            Debug.Assert(value != null);
+            return value;
         }
     }
 }

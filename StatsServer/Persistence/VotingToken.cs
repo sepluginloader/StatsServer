@@ -4,8 +4,8 @@ namespace avaness.StatsServer.Persistence;
 
 public class VotingToken
 {
-    public readonly DateTime Created;
-    public readonly Guid Guid;
+    public DateTime Created { get; set; }
+    public Guid Guid { get; set; }
 
     public VotingToken()
     {

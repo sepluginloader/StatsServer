@@ -18,6 +18,7 @@ namespace avaness.StatsServer.Controllers
         [HttpPost]
         public void Post(ConsentRequest request)
         {
+            statsDatabase.CountRequest(Request);
             statsDatabase.Consent(request);
         }
     }

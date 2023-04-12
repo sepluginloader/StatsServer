@@ -19,6 +19,7 @@ namespace avaness.StatsServer.Controllers
         [HttpPost]
         public void Post(TrackRequest request)
         {
+            statsDatabase.CountRequest(Request);
             statsDatabase.Track(request);
         }
     }

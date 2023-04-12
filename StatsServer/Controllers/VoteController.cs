@@ -18,6 +18,7 @@ namespace avaness.StatsServer.Controllers
         [HttpPost]
         public PluginStat Post(VoteRequest request)
         {
+            statsDatabase.CountRequest(Request);
             return statsDatabase.Vote(request);
         }
     }

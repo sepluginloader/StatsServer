@@ -11,9 +11,14 @@ namespace avaness.StatsServer
         public static readonly string DataDir;
         public static readonly int SavePeriod;
 
-        public static string PluginStatsDir => Path.Combine(Config.DataDir, "PluginStats");
-        public static string PluginMapPath => Path.Combine(Config.DataDir, "Plugins.json");
-        public static string CanaryPath => Path.Combine(Config.DataDir, "Canary.txt");
+        public static string PlayerConsentsPath => Path.Combine(DataDir, "PlayerConsents.json");
+        public static string PluginStatsDir => Path.Combine(DataDir, "PluginStats");
+        public static string PluginMapPath => Path.Combine(DataDir, "Plugins.json");
+        public static string VotingTokensPath => Path.Combine(DataDir, "VotingTokens.json");
+        public static string RequestCountsPath => Path.Combine(DataDir, "RequestCounts.json");
+        public static string PlayersLastSeenPath => Path.Combine(DataDir, "PlayersLastSeen.json");
+        public static string UniquePlayerCountsPath => Path.Combine(DataDir, "UniquePlayerCounts.json");
+        public static string CanaryPath => Path.Combine(DataDir, "Canary.txt");
         
         static Config()
         {

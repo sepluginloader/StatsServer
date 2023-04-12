@@ -19,6 +19,8 @@ namespace avaness.StatsServer.Controllers
         [HttpGet]
         public PluginStats Get(string playerHash)
         {
+            statsDatabase.CountRequest(Request);
+            statsDatabase.CountUniquePlayer(playerHash);
             return statsDatabase.GetStats(playerHash);
         }
     }
